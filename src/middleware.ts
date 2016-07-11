@@ -1,26 +1,26 @@
 import { isFSA } from "flux-standard-action";
-import assign from "object-assign";
+import * as assign from "object-assign";
 import { Promise } from "es6-promise";
-import { promiseAsyncRequest, promiseAsyncSucceeded, promiseAsyncFailed } from "./actions"
-import {FluxStandardAction} from "~flux-standard-action/lib/index";
+import { promiseTrackRequest, promiseTrackSucceeded, promiseTrackFailed } from "./actions"
+import { FluxStandardAction } from "flux-standard-action";
 
-export function promiseMiddleware({ dispatch }) {
+export function promiseTrackMiddleware({ dispatch }) {
     return (next) => (action) => {
         if (!isActionFSA(action)) {
             return isPromise(action) ? action.then(dispatch) : next(action);
         }
 
         if(isPromise(action.payload)) {
-            dispatch(promiseAsyncRequest(action.type));
+            dispatch(promiseTrackRequest(action));
 
             return action.payload.then(
                 result => {
-                    dispatch(promiseAsyncSucceeded(action.type));
+                    dispatch(promiseTrackSucceeded(action));
 
                     return dispatch(assign({}, action, { payload: result }));
                 },
                 error => {
-                    dispatch(promiseAsyncFailed(action.type, error));
+                    dispatch(promiseTrackFailed(action, error));
                     dispatch(assign({}, action, { payload: error, error: true }));
 
                     return Promise.reject(error);

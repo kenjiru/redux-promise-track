@@ -3,7 +3,7 @@ import { Promise } from "es6-promise";
 import { spy } from "sinon";
 import chai, { expect } from "chai";
 
-import { promiseMiddleware } from "../src/middleware";
+import { promiseTrackMiddleware } from "../src/middleware";
 
 function noop() {}
 const GIVE_ME_META = "GIVE_ME_META";
@@ -14,7 +14,7 @@ function metaMiddleware() {
             : next(action);
 }
 
-describe("promiseMiddleware", () => {
+describe("promiseTrackMiddleware", () => {
     let baseDispatch;
     let dispatch;
     let dummyResult;
@@ -24,7 +24,7 @@ describe("promiseMiddleware", () => {
         baseDispatch = spy();
         dispatch = function d(action) {
             const methods = { dispatch: d, getState: noop };
-            return metaMiddleware()(promiseMiddleware(methods)(baseDispatch))(action);
+            return metaMiddleware()(promiseTrackMiddleware(methods)(baseDispatch))(action);
         };
         dummyResult = { foo: "bar" };
         err = new Error();
