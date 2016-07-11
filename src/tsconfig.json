@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"sourceMap": true,
+		"noImplicitAny": false,
+		"removeComments": false,
+		"preserveConstEnums": true,
+		"allowSyntheticDefaultImports": true,
+		"outDir": "../lib/"
+	},
+	"filesGlob": [
+		"../typings/**/*.*.ts",
+		"../node_modules/**/dist/*.d.ts",
+		"../src/**/*.ts"
+	],
+	"files": [
+		"./index.ts",
+		"../typings/index.d.ts"
+	]
+}

@@ -9,7 +9,7 @@ export let promiseAsyncRequest = (actionType) => ({
     }
 });
 
-export let promiseAsyncSuccedded = (actionType) => ({
+export let promiseAsyncSucceeded = (actionType) => ({
     type: PROMISE_ASYNC_SUCCESS,
     payload: {
         actionType

@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"sourceMap": true,
+		"noImplicitAny": false,
+		"removeComments": false,
+		"preserveConstEnums": true,
+		"allowSyntheticDefaultImports": true
+	},
+	"exclude": [
+		"typings/main.d.ts",
+		"typings/main",
+		"node_modules"
+	]
+}
