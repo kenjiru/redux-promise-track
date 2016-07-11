@@ -2,14 +2,11 @@ import { isFSA } from "flux-standard-action";
 import assign from "object-assign";
 import { Promise } from "es6-promise";
 import { promiseAsyncRequest, promiseAsyncSucceeded, promiseAsyncFailed } from "./actions"
-
-function isPromise(val) {
-    return val && typeof val.then === "function";
-}
+import {FluxStandardAction} from "~flux-standard-action/lib/index";
 
 export function promiseMiddleware({ dispatch }) {
     return (next) => (action) => {
-        if (!isFSA(action)) {
+        if (!isActionFSA(action)) {
             return isPromise(action) ? action.then(dispatch) : next(action);
         }
 
@@ -33,4 +30,12 @@ export function promiseMiddleware({ dispatch }) {
 
         return next(action);
     };
+}
+
+function isPromise(value: any): value is Promise<any> {
+    return value && typeof value.then === "function";
+}
+
+function isActionFSA(value: any): value is FluxStandardAction {
+    return isFSA(value);
 }
