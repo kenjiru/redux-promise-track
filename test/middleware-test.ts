@@ -1,9 +1,12 @@
-import assign from "object-assign";
+import * as assign from "object-assign";
 import { Promise } from "es6-promise";
 import { spy } from "sinon";
-import chai, { expect } from "chai";
+import * as chai from "chai";
+import * as chaiAsPromised from "chai-as-promised";
+import { expect } from "chai";
 
 import { promiseTrackMiddleware } from "../src/middleware";
+import {PROMISE_TRACK_REQUEST, PROMISE_TRACK_SUCCESS} from "../src/actions";
 
 function noop() {}
 const GIVE_ME_META = "GIVE_ME_META";
@@ -30,36 +33,105 @@ describe("promiseTrackMiddleware", () => {
         err = new Error();
     });
 
-    it("handles Flux standard actions", () => {
+    it("handles successful promises", (done: Function) => {
         dispatch({
             type: "ACTION_TYPE",
             payload: Promise.resolve(dummyResult)
         }).then(() => {
             expect(baseDispatch.callCount).to.equal(3);
+
+            expect(baseDispatch.getCall(0).args[0]).to.deep.equal({
+                type: PROMISE_TRACK_REQUEST,
+                payload: {
+                    actionType: "ACTION_TYPE"
+                }
+            });
+
+            expect(baseDispatch.getCall(1).args[0]).to.deep.equal({
+                type: PROMISE_TRACK_SUCCESS,
+                payload: {
+                    actionType: "ACTION_TYPE"
+                }
+            });
+
             expect(baseDispatch.getCall(2).args[0]).to.deep.equal({
                 type: "ACTION_TYPE",
                 payload: dummyResult
             });
-        });
 
+            done();
+        }).catch((error) => {
+            done(error);
+        });
+    });
+
+    it("handles successful promises with ids", (done: Function) => {
+        dispatch({
+            type: "ACTION_TYPE",
+            payload: Promise.resolve(dummyResult),
+            meta: {
+                actionId: "ACTION_ID"
+            }
+        }).then(() => {
+            expect(baseDispatch.callCount).to.equal(3);
+
+            expect(baseDispatch.getCall(0).args[0]).to.deep.equal({
+                type: PROMISE_TRACK_REQUEST,
+                payload: {
+                    actionType: "ACTION_TYPE",
+                    actionId: "ACTION_ID"
+                }
+            });
+
+            expect(baseDispatch.getCall(1).args[0]).to.deep.equal({
+                type: PROMISE_TRACK_SUCCESS,
+                payload: {
+                    actionType: "ACTION_TYPE",
+                    actionId: "ACTION_ID"
+                }
+            });
+
+            expect(baseDispatch.getCall(2).args[0]).to.deep.equal({
+                type: "ACTION_TYPE",
+                payload: dummyResult,
+                meta: {
+                    actionId: "ACTION_ID"
+                }
+            });
+
+            done();
+        }).catch((error) => {
+            done(error);
+        });
+    });
+
+    it("handles failed promises", (done: Function) => {
         dispatch({
             type: "ACTION_TYPE",
             payload: Promise.reject(err)
-        }).then(() => {
+        }).then((result) => {
             expect(baseDispatch.callCount).to.equal(6);
             expect(baseDispatch.getCall(5).args[0]).to.deep.equal({
                 type: "ACTION_TYPE",
                 payload: err,
                 error: true
             });
-        }).catch(noop);
+            done();
+        }).catch(() => {
+            done();
+        });
+    });
 
+    it("handles failed promises 2", (done: Function) => {
         dispatch({
             type: "ACTION_TYPE",
             payload: Promise.reject(err)
         }).then((result) => {
             expect(result).to.eventually.be.rejectedWith(err);
-        })
+            done();
+        }).catch(() => {
+            done();
+        });
     });
 
     it("handles promises", () => {
@@ -88,7 +160,7 @@ describe("promiseTrackMiddleware", () => {
         });
     });
 
-    it("starts async dispatches from beginning of middleware chain", () => {
+    it("starts async dispatches from beginning of middleware chain", (done: Function) => {
         dispatch(Promise.resolve({ type: GIVE_ME_META })).then(() => {
             dispatch({ type: GIVE_ME_META });
 
@@ -96,6 +168,7 @@ describe("promiseTrackMiddleware", () => {
                 "here you go",
                 "here you go"
             ]);
+            done();
         });
     });
 });

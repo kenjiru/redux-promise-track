@@ -4,8 +4,8 @@
   "description": "FSA-compliant promise middleware for Redux.",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc -p ./src/tsconfig.json",
-    "test": "mocha -R spec --require ts-node/register test/**/*.ts"
+    "build": "tsc -w -p ./src/tsconfig.json",
+    "test": "TS_NODE_FAST=true mocha --require ts-node/register test/**/*.ts"
   },
   "repository": {
     "type": "git",
