@@ -1,4 +1,4 @@
-import assign from "object-assign";
+import * as assign from "object-assign";
 import {PROMISE_TRACK_REQUEST, PROMISE_TRACK_SUCCESS, PROMISE_TRACK_FAILED, IPromiseTrackAction, IPromiseTrackPayload} from "./actions";
 
 export function promiseTrackReducer(state: IPromiseTrackStore = {}, action: IPromiseTrackAction): IPromiseTrackStore {
@@ -48,21 +48,21 @@ function setState(state: IPromiseTrackStore, payload: IPromiseTrackPayload, load
     }
 
     return assign({}, state, {
-        [payload.actionType]: loadingState
+        [payload.actionType]: assign({}, state[payload.actionType], loadingState)
     });
 }
 
-interface IPromiseTrackStore {
+export interface IPromiseTrackStore {
     [actionType: string]: IActionLoadingState;
 }
 
-interface IActionLoadingState extends ILoadingState {
+export interface IActionLoadingState extends ILoadingState {
     items?: {
         [actionId: string]: ILoadingState;
     }
 }
 
-interface ILoadingState {
+export interface ILoadingState {
     isLoading?: boolean;
     isSuccess?: boolean;
     error?: any;
