@@ -60,7 +60,7 @@ describe("promiseTrackReducer", () => {
 
 
     describe("handle sub-actions (actions with ids)", () => {
-        it("set the state of a sub-action, the main action has no state", () => {
+        it("set the state of a sub-action, when the main action has no state", () => {
             let state: IPromiseTrackStore = promiseTrackReducer({}, promiseTrackSucceeded({
                 type: MAIN_ACTION,
                 meta: {
@@ -70,7 +70,9 @@ describe("promiseTrackReducer", () => {
 
             expect(state).to.deep.equal({
                 [MAIN_ACTION]: {
-                    [ACTION_ID]: successState
+                    items: {
+                        [ACTION_ID]: successState
+                    }
                 }
             });
         });
@@ -89,7 +91,9 @@ describe("promiseTrackReducer", () => {
 
             expect(state).to.deep.equal({
                 [MAIN_ACTION]: assign({}, loadingState, {
-                    [ACTION_ID]: successState
+                    items: {
+                        [ACTION_ID]: successState
+                    }
                 })
             });
         });
@@ -97,7 +101,9 @@ describe("promiseTrackReducer", () => {
         it("set the state of a sub-action, when other sub-actions have state", () => {
             let initialState: IPromiseTrackStore = {
                 [MAIN_ACTION]: {
-                    [OTHER_ACTION_ID]: loadingState
+                    items: {
+                        [OTHER_ACTION_ID]: loadingState
+                    }
                 }
             };
 
@@ -110,8 +116,10 @@ describe("promiseTrackReducer", () => {
 
             expect(state).to.deep.equal({
                 [MAIN_ACTION]: {
-                    [OTHER_ACTION_ID]: loadingState,
-                    [ACTION_ID]: successState
+                    items: {
+                        [OTHER_ACTION_ID]: loadingState,
+                        [ACTION_ID]: successState
+                    }
                 }
             });
         });
@@ -119,7 +127,9 @@ describe("promiseTrackReducer", () => {
         it("update the state of a sub-action", () => {
             let initialState: IPromiseTrackStore = {
                 [MAIN_ACTION]: {
-                    [ACTION_ID]: loadingState
+                    items: {
+                        [ACTION_ID]: loadingState
+                    }
                 }
             };
 
@@ -132,7 +142,9 @@ describe("promiseTrackReducer", () => {
 
             expect(state).to.deep.equal({
                 [MAIN_ACTION]: {
-                    [ACTION_ID]: successState
+                    items: {
+                        [ACTION_ID]: successState
+                    }
                 }
             });
         });
@@ -140,7 +152,9 @@ describe("promiseTrackReducer", () => {
         it("update the state of a the main action that has sub-actions", () => {
             let initialState: IPromiseTrackStore = {
                 [MAIN_ACTION]: {
-                    [ACTION_ID]: successState
+                    items: {
+                        [ACTION_ID]: successState
+                    }
                 }
             };
 
@@ -150,7 +164,9 @@ describe("promiseTrackReducer", () => {
 
             expect(state).to.deep.equal({
                 [MAIN_ACTION]: assign({}, successState, {
-                    [ACTION_ID]: successState
+                    items: {
+                        [ACTION_ID]: successState
+                    }
                 })
             });
         });

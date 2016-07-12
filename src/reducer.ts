@@ -33,13 +33,15 @@ function setState(state: IPromiseTrackStore, payload: IPromiseTrackPayload, load
         let actionLoadingState: IActionLoadingState = state[payload.actionType];
 
         if (typeof actionLoadingState === "undefined") {
-            state[payload.actionType] = {
+            actionLoadingState = {
                 items: {}
-            } as IActionLoadingState;
+            };
         }
 
         actionLoadingState = assign({}, actionLoadingState, {
-            [payload.actionId]: loadingState
+            items: assign({}, actionLoadingState.items, {
+                [payload.actionId]: loadingState
+            })
         });
 
         return assign({}, state, {
