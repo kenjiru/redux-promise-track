@@ -2,11 +2,11 @@ import {ILoadingState, IActionLoadingState} from "./reducer";
 
 export function getLoadingState(state: any, actionType: string, actionId?: string): ILoadingState {
     if (!state) {
-        throw new Error("Invalid state");
+        throw new Error("Invalid state!");
     }
 
     if (!actionType) {
-        throw new Error("Invalid action type");
+        throw new Error("Invalid action type!");
     }
 
     if (!state.promiseTrackReducer) {
@@ -26,4 +26,20 @@ export function getLoadingState(state: any, actionType: string, actionId?: strin
     let loadingState: ILoadingState = actionLoadingState.items[actionId];
 
     return loadingState || {};
+}
+
+export function getItemLoadingState(actionLoadingState: IActionLoadingState, actionId: string): ILoadingState {
+    if (!actionLoadingState) {
+        throw new Error("Invalid action state!");
+    }
+
+    if (!actionId){
+        throw new Error("Invalid action id!");
+    }
+
+    if (actionLoadingState.items) {
+        return actionLoadingState.items[actionId] || {};
+    }
+
+    return {};
 }
