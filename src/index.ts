@@ -2,4 +2,4 @@
 
 export { promiseTrackMiddleware } from "./middleware";
 export { promiseTrackReducer } from "./reducer";
-export { getLoadingState } from "./getLoadingState";
+export { getLoadingState } from "./helpers";
