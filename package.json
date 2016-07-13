@@ -4,6 +4,7 @@
   "description": "FSA-compliant promise middleware for Redux.",
   "main": "lib/index.js",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "tsc -p ./src/tsconfig.json",
     "test": "mocha --require ts-node/register test/**/*.ts"
   },
