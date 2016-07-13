@@ -1,4 +1,4 @@
-import * as assign from "object-assign";
+import assign = require("object-assign");
 import {PROMISE_TRACK_REQUEST, PROMISE_TRACK_SUCCESS, PROMISE_TRACK_FAILED, IPromiseTrackAction, IPromiseTrackPayload} from "./actions";
 
 export function promiseTrackReducer(state: IPromiseTrackStore = {}, action: IPromiseTrackAction): IPromiseTrackStore {

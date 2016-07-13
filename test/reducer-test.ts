@@ -1,4 +1,4 @@
-import * as assign from "object-assign";
+import assign = require("object-assign");
 import { expect } from "chai";
 
 import {promiseTrackReducer, IPromiseTrackStore, ILoadingState} from "../src/reducer";

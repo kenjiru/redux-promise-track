@@ -1,5 +1,5 @@
+import assign = require("object-assign");
 import { isFSA } from "flux-standard-action";
-import * as assign from "object-assign";
 import { Promise } from "es6-promise";
 import { promiseTrackRequest, promiseTrackSucceeded, promiseTrackFailed } from "./actions"
 import { FluxStandardAction } from "flux-standard-action";

@@ -1,4 +1,4 @@
-import * as assign from "object-assign";
+import assign = require("object-assign");
 import { Promise } from "es6-promise";
 import { spy } from "sinon";
 import * as chai from "chai";
