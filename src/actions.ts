@@ -5,57 +5,42 @@ export const PROMISE_TRACK_SUCCESS = "PROMISE_TRACK_SUCCESS";
 export const PROMISE_TRACK_FAILED = "PROMISE_TRACK_FAILED";
 
 export function promiseTrackRequest(action: FluxStandardAction): IPromiseTrackAction {
-    let asyncAction: IPromiseTrackAction = {
-        type: PROMISE_TRACK_REQUEST,
-        payload: {
-            actionType: action.type
-        }
-    };
-
-    if (action.meta && action.meta.actionId) {
-        asyncAction.payload.actionId = action.meta.actionId;
-    }
-
-    return asyncAction;
+    return createAction(PROMISE_TRACK_REQUEST, action);
 }
 
 export function promiseTrackSucceeded(action: FluxStandardAction): IPromiseTrackAction {
-    let asyncAction: IPromiseTrackAction = {
-        type: PROMISE_TRACK_SUCCESS,
-        payload: {
-            actionType: action.type
-        }
-    };
-
-    if (action.meta && action.meta.actionId) {
-        asyncAction.payload.actionId = action.meta.actionId;
-    }
-
-    return asyncAction;
+    return createAction(PROMISE_TRACK_SUCCESS, action);
 }
 
 export function promiseTrackFailed(action: FluxStandardAction, actionError: any): IPromiseTrackAction {
+    return createAction(PROMISE_TRACK_FAILED, action, actionError);
+}
+
+function createAction(type: string, originalAction: FluxStandardAction, error?: any): IPromiseTrackAction {
     let asyncAction: IPromiseTrackAction = {
-        type: PROMISE_TRACK_FAILED,
+        type,
         payload: {
-            actionType: action.type,
-            actionError
+            actionType: originalAction.type
         }
     };
 
-    if (action.meta && action.meta.actionId) {
-        asyncAction.payload.actionId = action.meta.actionId;
+    if (error) {
+        asyncAction.payload.actionError = error;
+    }
+
+    if (originalAction.meta && originalAction.meta.actionId) {
+        asyncAction.payload.actionId = originalAction.meta.actionId;
     }
 
     return asyncAction;
 }
 
 export interface IPromiseTrackAction extends FluxStandardAction {
-    payload?: IPromiseTrackPayload;
+    payload: IPromiseTrackPayload;
 }
 
 export interface IPromiseTrackPayload {
-    actionType?: string|symbol;
+    actionType: string|symbol;
     actionId?: string;
     actionError?: any;
 }
