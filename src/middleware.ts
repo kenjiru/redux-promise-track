@@ -18,14 +18,12 @@ export function promiseTrackMiddleware({ dispatch }) {
                     dispatch(promiseTrackSucceeded(action));
 
                     return dispatch(assign({}, action, { payload: result }));
-                },
-                error => {
-                    dispatch(promiseTrackFailed(action, error));
-                    dispatch(assign({}, action, { payload: error, error: true }));
-
-                    return Promise.reject(error);
                 }
-            );
+            ).catch(error => {
+                dispatch(promiseTrackFailed(action, error));
+
+                return Promise.reject(error);
+            });
         }
 
         return next(action);
