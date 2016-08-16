@@ -1,7 +1,12 @@
 import assign = require("object-assign");
-import {PROMISE_TRACK_REQUEST, PROMISE_TRACK_SUCCESS, PROMISE_TRACK_FAILED, IPromiseTrackAction, IPromiseTrackPayload} from "./actions";
+import {
+    PROMISE_TRACK_REQUEST, PROMISE_TRACK_SUCCESS, PROMISE_TRACK_FAILED, IPromiseTrackAction, IPromiseTrackPayload,
+    PROMISE_TRACK_REMOVE_STATE, PROMISE_TRACK_REMOVE_STATES
+} from "./actions";
+import {FluxStandardAction} from "~flux-standard-action/lib/index";
 
-export function promiseTrackReducer(state: IPromiseTrackStore = {}, action: IPromiseTrackAction): IPromiseTrackStore {
+export function promiseTrackReducer(state: IPromiseTrackStore = {},
+                                    action: IPromiseTrackAction|FluxStandardAction): IPromiseTrackStore {
     switch (action.type) {
         case PROMISE_TRACK_REQUEST:
             return setState(state, action.payload, {
@@ -23,12 +28,53 @@ export function promiseTrackReducer(state: IPromiseTrackStore = {}, action: IPro
                 isSuccess: false,
                 error: action.payload.actionError
             });
+
+        case PROMISE_TRACK_REMOVE_STATES:
+            return deleteStates(state, action.payload.actionTypes);
+
+        case PROMISE_TRACK_REMOVE_STATE:
+            return deleteState(state, action.payload.actionType, action.payload.actionId);
     }
 
     return state;
 }
 
-function setState(state: IPromiseTrackStore, payload: IPromiseTrackPayload, loadingState: ILoadingState): IPromiseTrackStore {
+function deleteStates(state: IPromiseTrackStore, actionTypes: string[]): IPromiseTrackStore {
+    state = assign({}, state);
+
+    actionTypes.forEach((actionType: string): void => {
+        delete state[actionType];
+    });
+
+    return state;
+}
+
+function deleteState(state: IPromiseTrackStore, actionType: string, actionId?: string): IPromiseTrackStore {
+    state = assign({}, state);
+
+    let actionLoadingState: IActionLoadingState = state[actionType];
+
+    if (typeof actionLoadingState === "undefined") {
+        console.log("actionLoadingState is undefined");
+        return state;
+    }
+
+    if (typeof actionId === "undefined") {
+        delete state[actionType];
+    } else {
+        if (typeof actionLoadingState.items === "undefined") {
+            console.log("actionLoadingState.items is undefined");
+            return state;
+        }
+
+        delete actionLoadingState.items[actionId];
+    }
+
+    return state;
+}
+
+function setState(state: IPromiseTrackStore, payload: IPromiseTrackPayload,
+                  loadingState: ILoadingState): IPromiseTrackStore {
     if (typeof payload.actionId !== "undefined") {
         let actionLoadingState: IActionLoadingState = state[payload.actionType];
 
