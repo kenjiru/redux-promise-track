@@ -18,12 +18,22 @@ export function promiseTrackFailed(action: FluxStandardAction, actionError: any)
     return createAction(PROMISE_TRACK_FAILED, action, actionError);
 }
 
-export function removeLoadingState(actionType: string, actionId?: string): FluxStandardAction {
+export function removeLoadingState(actionType: string, actionId?: string|string[]): FluxStandardAction {
+    let actionIds: string[];
+
+    if (actionId instanceof Array) {
+        actionIds = actionId;
+    } else {
+        if (typeof actionId !== "undefined") {
+            actionIds = [actionId];
+        }
+    }
+
     return {
         type: PROMISE_TRACK_REMOVE_STATE,
         payload: {
             actionType,
-            actionId
+            actionIds
         }
     };
 }

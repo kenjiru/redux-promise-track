@@ -30,16 +30,16 @@ export function promiseTrackReducer(state: IPromiseTrackStore = {},
             });
 
         case PROMISE_TRACK_REMOVE_STATES:
-            return deleteStates(state, action.payload.actionTypes);
+            return removeStates(state, action.payload.actionTypes);
 
         case PROMISE_TRACK_REMOVE_STATE:
-            return deleteState(state, action.payload.actionType, action.payload.actionId);
+            return removeState(state, action.payload.actionType, action.payload.actionIds);
     }
 
     return state;
 }
 
-function deleteStates(state: IPromiseTrackStore, actionTypes: string[]): IPromiseTrackStore {
+function removeStates(state: IPromiseTrackStore, actionTypes: string[]): IPromiseTrackStore {
     state = assign({}, state);
 
     actionTypes.forEach((actionType: string): void => {
@@ -49,25 +49,25 @@ function deleteStates(state: IPromiseTrackStore, actionTypes: string[]): IPromis
     return state;
 }
 
-function deleteState(state: IPromiseTrackStore, actionType: string, actionId?: string): IPromiseTrackStore {
+function removeState(state: IPromiseTrackStore, actionType: string, actionIds?: string[]): IPromiseTrackStore {
     state = assign({}, state);
 
     let actionLoadingState: IActionLoadingState = state[actionType];
 
     if (typeof actionLoadingState === "undefined") {
-        console.log("actionLoadingState is undefined");
         return state;
     }
 
-    if (typeof actionId === "undefined") {
+    if (typeof actionIds === "undefined") {
         delete state[actionType];
     } else {
         if (typeof actionLoadingState.items === "undefined") {
-            console.log("actionLoadingState.items is undefined");
             return state;
         }
 
-        delete actionLoadingState.items[actionId];
+        actionIds.forEach((actionId: string): void => {
+            delete actionLoadingState.items[actionId];
+        });
     }
 
     return state;
