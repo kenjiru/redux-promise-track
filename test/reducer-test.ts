@@ -176,7 +176,7 @@ describe("promiseTrackReducer", () => {
         });
     });
 
-    describe.only("deleting the loading state", () => {
+    describe("deleting the loading state", () => {
         it("should delete the loading state of single action", () => {
             let initialState: IPromiseTrackStore = {
                 [MAIN_ACTION]: loadingState
