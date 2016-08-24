@@ -1,4 +1,6 @@
+import assign = require("object-assign");
 import { FluxStandardAction } from "flux-standard-action";
+import {isEmpty} from "./util";
 
 export const PROMISE_TRACK_REQUEST = "PROMISE_TRACK_REQUEST";
 export const PROMISE_TRACK_SUCCESS = "PROMISE_TRACK_SUCCESS";
@@ -54,6 +56,19 @@ function createAction(type: string, originalAction: FluxStandardAction, error?: 
             actionType: originalAction.type
         }
     };
+
+    let meta: any = assign({}, originalAction.meta);
+
+    if (typeof meta === "object") {
+        if (typeof meta.actionId !== "undefined") {
+            delete meta.actionId;
+        }
+
+        if (isEmpty(meta) === false) {
+
+            asyncAction.meta = meta;
+        }
+    }
 
     if (error) {
         asyncAction.payload.actionError = error;

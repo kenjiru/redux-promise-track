@@ -4,26 +4,27 @@ import {
     PROMISE_TRACK_REMOVE_STATE, PROMISE_TRACK_REMOVE_STATES
 } from "./actions";
 import {FluxStandardAction} from "~flux-standard-action/lib/index";
+import {isEmpty} from "./util";
 
 export function promiseTrackReducer(state: IPromiseTrackStore = {},
                                     action: IPromiseTrackAction|FluxStandardAction): IPromiseTrackStore {
     switch (action.type) {
         case PROMISE_TRACK_REQUEST:
-            return setState(state, action.payload, {
+            return setState(state, action as IPromiseTrackAction, {
                 isLoading: true,
                 isSuccess: false,
                 error: null
             });
 
         case PROMISE_TRACK_SUCCESS:
-            return setState(state, action.payload, {
+            return setState(state, action as IPromiseTrackAction, {
                 isLoading: false,
                 isSuccess: true,
                 error: null
             });
 
         case PROMISE_TRACK_FAILED:
-            return setState(state, action.payload, {
+            return setState(state, action as IPromiseTrackAction, {
                 isLoading: false,
                 isSuccess: false,
                 error: action.payload.actionError
@@ -73,8 +74,22 @@ function removeState(state: IPromiseTrackStore, actionType: string, actionIds?: 
     return state;
 }
 
-function setState(state: IPromiseTrackStore, payload: IPromiseTrackPayload,
+function setState(state: IPromiseTrackStore, action: IPromiseTrackAction,
                   loadingState: ILoadingState): IPromiseTrackStore {
+    let payload: IPromiseTrackPayload = action.payload;
+    let meta: any = action.meta;
+
+    if (typeof meta === "object") {
+        if (typeof meta.actionId !== "undefined") {
+            delete meta.actionId;
+        }
+
+        if (isEmpty(meta) === false) {
+
+            loadingState.meta = meta;
+        }
+    }
+
     if (typeof payload.actionId !== "undefined") {
         let actionLoadingState: IActionLoadingState = state[payload.actionType];
 
@@ -114,4 +129,5 @@ export interface ILoadingState {
     isLoading?: boolean;
     isSuccess?: boolean;
     error?: any;
+    meta?: any;
 }
