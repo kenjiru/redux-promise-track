@@ -5,6 +5,7 @@
 		"sourceMap": true,
 		"noImplicitAny": false,
 		"removeComments": false,
+		"declaration": true,
 		"preserveConstEnums": true,
 		"allowSyntheticDefaultImports": true,
 		"outDir": "../lib/"
