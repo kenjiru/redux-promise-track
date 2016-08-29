@@ -3,7 +3,6 @@
   "version": "0.6.1",
   "description": "FSA-compliant promise middleware for Redux.",
   "main": "lib/index.js",
-  "typings": "./lib/index.d.ts",
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc -p ./src/tsconfig.json",
