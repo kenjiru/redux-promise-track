@@ -1,4 +1,3 @@
-import assign = require("object-assign");
 import { spy } from "sinon";
 import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
@@ -12,7 +11,7 @@ const GIVE_ME_META = "GIVE_ME_META";
 function metaMiddleware() {
     return next => action =>
         action.type === GIVE_ME_META
-            ? next(assign({}, action, { meta: "here you go" }))
+            ? next(Object.assign({}, action, { meta: "here you go" }))
             : next(action);
 }
 

@@ -1,4 +1,3 @@
-import assign = require("object-assign");
 import {
     PROMISE_TRACK_REQUEST, PROMISE_TRACK_SUCCESS, PROMISE_TRACK_FAILED, IPromiseTrackAction, IPromiseTrackPayload,
     PROMISE_TRACK_REMOVE_STATE, PROMISE_TRACK_REMOVE_STATES
@@ -41,7 +40,7 @@ export function promiseTrackReducer(state: IPromiseTrackStore = {},
 }
 
 function removeStates(state: IPromiseTrackStore, actionTypes: string[]): IPromiseTrackStore {
-    state = assign({}, state);
+    state = Object.assign({}, state);
 
     actionTypes.forEach((actionType: string): void => {
         delete state[actionType];
@@ -51,7 +50,7 @@ function removeStates(state: IPromiseTrackStore, actionTypes: string[]): IPromis
 }
 
 function removeState(state: IPromiseTrackStore, actionType: string, actionIds?: string[]): IPromiseTrackStore {
-    state = assign({}, state);
+    state = Object.assign({}, state);
 
     let actionLoadingState: IActionLoadingState = state[actionType];
 
@@ -99,19 +98,19 @@ function setState(state: IPromiseTrackStore, action: IPromiseTrackAction,
             };
         }
 
-        actionLoadingState = assign({}, actionLoadingState, {
-            items: assign({}, actionLoadingState.items, {
+        actionLoadingState = Object.assign({}, actionLoadingState, {
+            items: Object.assign({}, actionLoadingState.items, {
                 [payload.actionId]: loadingState
             })
         });
 
-        return assign({}, state, {
+        return Object.assign({}, state, {
             [payload.actionType]: actionLoadingState
         });
     }
 
-    return assign({}, state, {
-        [payload.actionType]: assign({}, state[payload.actionType], loadingState)
+    return Object.assign({}, state, {
+        [payload.actionType]: Object.assign({}, state[payload.actionType], loadingState)
     });
 }
 

@@ -1,4 +1,3 @@
-import assign = require("object-assign");
 import {expect} from "chai";
 
 import {promiseTrackReducer, IPromiseTrackStore, ILoadingState} from "../src/reducer";
@@ -94,7 +93,7 @@ describe("promiseTrackReducer", () => {
             }));
 
             expect(state).to.deep.equal({
-                [MAIN_ACTION]: assign({}, loadingState, {
+                [MAIN_ACTION]: Object.assign({}, loadingState, {
                     items: {
                         [ACTION_ID]: successState
                     }
@@ -167,7 +166,7 @@ describe("promiseTrackReducer", () => {
             }));
 
             expect(state).to.deep.equal({
-                [MAIN_ACTION]: assign({}, successState, {
+                [MAIN_ACTION]: Object.assign({}, successState, {
                     items: {
                         [ACTION_ID]: successState
                     }
@@ -214,7 +213,7 @@ describe("promiseTrackReducer", () => {
 
         it("should delete the loading state of a sub-action", () => {
             let initialState: IPromiseTrackStore = {
-                [MAIN_ACTION]: assign({}, successState, {
+                [MAIN_ACTION]: Object.assign({}, successState, {
                     items: {
                         [ACTION_ID]: successState
                     }
@@ -225,7 +224,7 @@ describe("promiseTrackReducer", () => {
                 removeLoadingState(MAIN_ACTION, ACTION_ID));
 
             expect(state).to.deep.equal({
-                [MAIN_ACTION]: assign({}, successState, {
+                [MAIN_ACTION]: Object.assign({}, successState, {
                     items: {}
                 })
             });
@@ -233,7 +232,7 @@ describe("promiseTrackReducer", () => {
 
         it("should delete the loading state of a sub-action, keeping the other sub-actions", () => {
             let initialState: IPromiseTrackStore = {
-                [MAIN_ACTION]: assign({}, successState, {
+                [MAIN_ACTION]: Object.assign({}, successState, {
                     items: {
                         [ACTION_ID]: successState,
                         [OTHER_ACTION_ID]: loadingState
@@ -245,7 +244,7 @@ describe("promiseTrackReducer", () => {
                 removeLoadingState(MAIN_ACTION, ACTION_ID));
 
             expect(state).to.deep.equal({
-                [MAIN_ACTION]: assign({}, successState, {
+                [MAIN_ACTION]: Object.assign({}, successState, {
                     items: {
                         [OTHER_ACTION_ID]: loadingState
                     }

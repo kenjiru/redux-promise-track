@@ -1,4 +1,3 @@
-import assign = require("object-assign");
 import { isFSA } from "flux-standard-action";
 import { promiseTrackRequest, promiseTrackSucceeded, promiseTrackFailed } from "./actions"
 import { FluxStandardAction } from "flux-standard-action";
@@ -16,7 +15,7 @@ export function promiseTrackMiddleware({ dispatch }) {
                 result => {
                     dispatch(promiseTrackSucceeded(action));
 
-                    return dispatch(assign({}, action, { payload: result }));
+                    return dispatch(Object.assign({}, action, { payload: result }));
                 }
             ).catch(error => {
                 dispatch(promiseTrackFailed(action, error));

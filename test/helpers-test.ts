@@ -1,4 +1,3 @@
-import assign = require("object-assign");
 import { expect } from "chai";
 
 import {getLoadingState, getItemLoadingState} from "../src/helpers";

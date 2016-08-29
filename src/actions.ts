@@ -1,4 +1,3 @@
-import assign = require("object-assign");
 import { FluxStandardAction } from "flux-standard-action";
 import {isEmpty} from "./util";
 
@@ -57,7 +56,7 @@ function createAction(type: string, originalAction: FluxStandardAction, error?: 
         }
     };
 
-    let meta: any = assign({}, originalAction.meta);
+    let meta: any = Object.assign({}, originalAction.meta);
 
     if (typeof meta === "object") {
         if (typeof meta.actionId !== "undefined") {
