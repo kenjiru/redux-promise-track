@@ -3,7 +3,6 @@
     "node": "registry:dt/node#6.0.0+20160709114037"
   },
   "dependencies": {
-    "es6-promise": "registry:npm/es6-promise#3.0.0+20160211003958",
     "flux-standard-action": "registry:npm/flux-standard-action#0.6.1+20160625021936",
     "object-assign": "registry:npm/object-assign#4.0.1+20160301180549"
   },

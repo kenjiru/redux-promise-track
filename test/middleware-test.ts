@@ -1,5 +1,4 @@
 import assign = require("object-assign");
-import { Promise } from "es6-promise";
 import { spy } from "sinon";
 import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
