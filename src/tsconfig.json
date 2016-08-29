@@ -13,11 +13,13 @@
 	},
 	"filesGlob": [
 		"../typings/**/*.*.ts",
+		"../typings-custom/*.d.ts",
 		"../node_modules/**/dist/*.d.ts",
 		"../src/**/*.ts"
 	],
 	"files": [
 		"./index.ts",
-		"../typings/index.d.ts"
+		"../typings/index.d.ts",
+		"../typings-custom/index.d.ts"
 	]
 }

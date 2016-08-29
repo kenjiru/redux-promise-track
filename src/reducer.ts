@@ -2,7 +2,7 @@ import {
     PROMISE_TRACK_REQUEST, PROMISE_TRACK_SUCCESS, PROMISE_TRACK_FAILED, IPromiseTrackAction, IPromiseTrackPayload,
     PROMISE_TRACK_REMOVE_STATE, PROMISE_TRACK_REMOVE_STATES
 } from "./actions";
-import {FluxStandardAction} from "~flux-standard-action/lib/index";
+import {FluxStandardAction} from "flux-standard-action";
 import {isEmpty} from "./util";
 
 export function promiseTrackReducer(state: IPromiseTrackStore = {},
