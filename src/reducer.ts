@@ -12,6 +12,7 @@ export function promiseTrackReducer(state: IPromiseTrackStore = {},
             return setState(state, action as IPromiseTrackAction, {
                 isLoading: true,
                 isSuccess: false,
+                didRun: true,
                 error: null
             });
 
@@ -19,6 +20,7 @@ export function promiseTrackReducer(state: IPromiseTrackStore = {},
             return setState(state, action as IPromiseTrackAction, {
                 isLoading: false,
                 isSuccess: true,
+                didRun: true,
                 error: null
             });
 
@@ -26,6 +28,7 @@ export function promiseTrackReducer(state: IPromiseTrackStore = {},
             return setState(state, action as IPromiseTrackAction, {
                 isLoading: false,
                 isSuccess: false,
+                didRun: true,
                 error: action.payload.actionError
             });
 
@@ -127,6 +130,7 @@ export interface IActionLoadingState extends ILoadingState {
 export interface ILoadingState {
     isLoading?: boolean;
     isSuccess?: boolean;
+    didRun?: boolean;
     error?: any;
     meta?: any;
 }

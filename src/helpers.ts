@@ -10,22 +10,22 @@ export function getLoadingState(state: any, actionType: string, actionId?: strin
     }
 
     if (!state.promiseTrackReducer) {
-        return {};
+        return emptyObject;
     }
 
     let actionLoadingState: IActionLoadingState = state.promiseTrackReducer[actionType];
 
     if (!actionId) {
-        return actionLoadingState || {};
+        return actionLoadingState || emptyObject;
     }
 
     if (!actionLoadingState || !actionLoadingState.items) {
-        return {};
+        return emptyObject;
     }
 
     let loadingState: ILoadingState = actionLoadingState.items[actionId];
 
-    return loadingState || {};
+    return loadingState || emptyObject;
 }
 
 export function getItemLoadingState(actionLoadingState: IActionLoadingState, actionId: string): ILoadingState {
@@ -38,8 +38,12 @@ export function getItemLoadingState(actionLoadingState: IActionLoadingState, act
     }
 
     if (actionLoadingState.items) {
-        return actionLoadingState.items[actionId] || {};
+        return actionLoadingState.items[actionId] || emptyObject;
     }
 
-    return {};
+    return emptyObject;
 }
+
+export const emptyObject: ILoadingState = {
+    didRun: false
+};
