@@ -15,16 +15,19 @@ const err: Error = new Error("Generic error");
 const loadingState: ILoadingState = {
     isLoading: true,
     isSuccess: false,
+    didRun: true,
     error: null
 };
 const successState: ILoadingState = {
     isLoading: false,
     isSuccess: true,
+    didRun: true,
     error: null
 };
 const errorState: ILoadingState = {
     isLoading: false,
     isSuccess: false,
+    didRun: true,
     error: err
 };
 
