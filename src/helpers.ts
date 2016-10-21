@@ -47,3 +47,32 @@ export function getItemLoadingState(actionLoadingState: IActionLoadingState, act
 export const emptyObject: ILoadingState = {
     didRun: false
 };
+
+export function mapStateToProps<S,T>(mapState: (state: S) => T,
+                              mapLoadingState: (state: S) => ILoadingStateMap): (state: S, ownProps: T) => T {
+    return (state: S, ownProps: T): T => {
+        let loadingStates: ILoadingStateMap = mapLoadingState(state);
+
+        if (isLoading(loadingStates)) {
+            return Object.assign({}, ownProps, loadingStates);
+        }
+
+        return Object.assign({}, ownProps, mapState(state), loadingStates);
+    }
+}
+
+function isLoading(loadingStates: ILoadingStateMap): boolean {
+    for (let key in loadingStates) {
+        if (loadingStates.hasOwnProperty(key)) {
+            if (loadingStates[key].isLoading) {
+                return true
+            }
+        }
+    }
+
+    return false;
+}
+
+export interface ILoadingStateMap {
+    [key: string]: ILoadingState
+}
