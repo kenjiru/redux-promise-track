@@ -1,19 +1,63 @@
 import {ILoadingState, IActionLoadingState} from "./reducer";
 
-export function getLoadingState(state: any, actionType: string, actionId?: string): ILoadingState {
-    if (!state) {
-        throw new Error("Invalid state!");
+export function isLoading(state: any, actionTypes: string[]): boolean {
+    for (let actionType in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionType);
+
+        if (loadingState.isLoading === true) {
+            return true;
+        }
     }
 
+    return false;
+}
+
+export function isSuccess(state: any, actionTypes: string[]): boolean {
+    for (let actionType in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionType);
+
+        if (loadingState.isSuccess !== true) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export function hasErrors(state: any, actionTypes: string[]): boolean {
+    for (let actionType in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionType);
+
+        if (typeof loadingState.error !== "undefined" && loadingState.error !== null) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export function getErrors(state: any, actionTypes: string[]): IErrorsMap {
+    let errors: IErrorsMap = {};
+
+    for (let actionType in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionType);
+        let error: any = loadingState.error;
+
+        if (typeof error !== "undefined" && error !== null) {
+            errors[actionType] = error;
+        }
+    }
+
+    return errors;
+}
+
+export function getLoadingState(state: any, actionType: string, actionId?: string): ILoadingState {
     if (!actionType) {
         throw new Error("Invalid action type!");
     }
 
-    if (!state.promiseTrackReducer) {
-        return emptyObject;
-    }
-
-    let actionLoadingState: IActionLoadingState = state.promiseTrackReducer[actionType];
+    let promiseTrackReducer: ILoadingStateMap = getPromiseTrackState(state);
+    let actionLoadingState: IActionLoadingState = promiseTrackReducer[actionType];
 
     if (!actionId) {
         return actionLoadingState || emptyObject;
@@ -44,16 +88,12 @@ export function getItemLoadingState(actionLoadingState: IActionLoadingState, act
     return emptyObject;
 }
 
-export const emptyObject: ILoadingState = {
-    didRun: false
-};
-
 export function mapStateToProps<S,T>(mapState: (state: S) => T,
                               mapLoadingState: (state: S) => ILoadingStateMap): (state: S, ownProps: T) => T {
     return (state: S, ownProps: T): T => {
         let loadingStates: ILoadingStateMap = mapLoadingState(state);
 
-        if (isLoading(loadingStates)) {
+        if (isAllLoading(loadingStates)) {
             return Object.assign({}, ownProps, loadingStates);
         }
 
@@ -61,7 +101,7 @@ export function mapStateToProps<S,T>(mapState: (state: S) => T,
     }
 }
 
-function isLoading(loadingStates: ILoadingStateMap): boolean {
+function isAllLoading(loadingStates: ILoadingStateMap): boolean {
     for (let key in loadingStates) {
         if (loadingStates.hasOwnProperty(key)) {
             if (loadingStates[key].isLoading) {
@@ -73,6 +113,28 @@ function isLoading(loadingStates: ILoadingStateMap): boolean {
     return false;
 }
 
+function getPromiseTrackState(state: any): ILoadingStateMap {
+    if (!state) {
+        throw new Error("Invalid state!");
+    }
+
+    let promiseTrackReducer: ILoadingStateMap = state.promiseTrackReducer;
+
+    if (!promiseTrackReducer) {
+        return {};
+    }
+
+    return promiseTrackReducer;
+}
+
+export const emptyObject: ILoadingState = {
+    didRun: false
+};
+
 export interface ILoadingStateMap {
     [key: string]: ILoadingState
+}
+
+export interface IErrorsMap {
+    [key: string]: any;
 }
