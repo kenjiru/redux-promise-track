@@ -42,7 +42,7 @@ const storeWithSubaction = {
     }
 };
 
-describe("helpers", () => {
+describe("helpers - get state", () => {
     describe("getLoadingState()", () => {
         it("should handle an undefined store or action", () => {
             expect(getLoadingState.bind(null, null, null)).to.throw("Invalid state!");
