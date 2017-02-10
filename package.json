@@ -1,6 +1,6 @@
 {
   "name": "redux-promise-track",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "FSA-compliant promise middleware for Redux.",
   "main": "lib/index.js",
   "typings": "./lib/index.d.ts",
