@@ -1,8 +1,8 @@
 import {ILoadingState, IActionLoadingState} from "./reducer";
 
 export function isLoading(state: any, actionTypes: string[]): boolean {
-    for (let actionType in actionTypes) {
-        let loadingState: ILoadingState = getLoadingState(state, actionType);
+    for (let index in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionTypes[index]);
 
         if (loadingState.isLoading === true) {
             return true;
@@ -13,8 +13,8 @@ export function isLoading(state: any, actionTypes: string[]): boolean {
 }
 
 export function isSuccess(state: any, actionTypes: string[]): boolean {
-    for (let actionType in actionTypes) {
-        let loadingState: ILoadingState = getLoadingState(state, actionType);
+    for (let index in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionTypes[index]);
 
         if (loadingState.isSuccess !== true) {
             return false;
@@ -25,21 +25,22 @@ export function isSuccess(state: any, actionTypes: string[]): boolean {
 }
 
 export function hasErrors(state: any, actionTypes: string[]): boolean {
-    for (let actionType in actionTypes) {
-        let loadingState: ILoadingState = getLoadingState(state, actionType);
+    for (let index in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionTypes[index]);
 
         if (typeof loadingState.error !== "undefined" && loadingState.error !== null) {
-            return false;
+            return true;
         }
     }
 
-    return true;
+    return false;
 }
 
 export function getErrors(state: any, actionTypes: string[]): IErrorsMap {
     let errors: IErrorsMap = {};
 
-    for (let actionType in actionTypes) {
+    for (let index in actionTypes) {
+        let actionType: string = actionTypes[index];
         let loadingState: ILoadingState = getLoadingState(state, actionType);
         let error: any = loadingState.error;
 
@@ -52,11 +53,12 @@ export function getErrors(state: any, actionTypes: string[]): IErrorsMap {
 }
 
 export function getLoadingState(state: any, actionType: string, actionId?: string): ILoadingState {
+    let promiseTrackReducer: ILoadingStateMap = getPromiseTrackState(state);
+
     if (!actionType) {
         throw new Error("Invalid action type!");
     }
 
-    let promiseTrackReducer: ILoadingStateMap = getPromiseTrackState(state);
     let actionLoadingState: IActionLoadingState = promiseTrackReducer[actionType];
 
     if (!actionId) {
