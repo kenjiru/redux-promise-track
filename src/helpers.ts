@@ -12,7 +12,7 @@ export function isLoading(state: any, actionTypes: string[]): boolean {
     return false;
 }
 
-export function isSuccess(state: any, actionTypes: string[]): boolean {
+export function areAllSuccessful(state: any, actionTypes: string[]): boolean {
     for (let index in actionTypes) {
         let loadingState: ILoadingState = getLoadingState(state, actionTypes[index]);
 
@@ -22,6 +22,18 @@ export function isSuccess(state: any, actionTypes: string[]): boolean {
     }
 
     return true;
+}
+
+export function isAnySuccessful(state: any, actionTypes: string[]): boolean {
+    for (let index in actionTypes) {
+        let loadingState: ILoadingState = getLoadingState(state, actionTypes[index]);
+
+        if (loadingState.isSuccess === true) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 export function hasErrors(state: any, actionTypes: string[]): boolean {

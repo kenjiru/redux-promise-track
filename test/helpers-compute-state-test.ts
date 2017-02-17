@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import {isLoading, isSuccess, hasErrors, getErrors} from "../src/helpers";
+import {isLoading, areAllSuccessful, hasErrors, getErrors} from "../src/helpers";
 import {ILoadingState} from "../src/reducer";
 
 const LOADING_ACTION: string = "LOADING_ACTION";
@@ -112,35 +112,35 @@ describe("helpers - compute state", () => {
         });
     });
 
-    describe("isSuccess()", () => {
+    describe("areAllSuccessful()", () => {
         it("should handle an empty store", () => {
-            expect(isSuccess.bind(null, null, [SUCCESS_ACTION])).to.throw("Invalid state!");
-            expect(isSuccess({}, [SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithNoActions, [SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful.bind(null, null, [SUCCESS_ACTION])).to.throw("Invalid state!");
+            expect(areAllSuccessful({}, [SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithNoActions, [SUCCESS_ACTION])).to.equal(false);
         });
 
         it("should handle a store with a single action", () => {
-            expect(isSuccess(storeWithLoading, [SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithError, [SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithSuccess, [SUCCESS_ACTION])).to.equal(true);
+            expect(areAllSuccessful(storeWithLoading, [SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithError, [SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithSuccess, [SUCCESS_ACTION])).to.equal(true);
         });
 
         it("should handle a store with more actions", () => {
-            expect(isSuccess(storeWithLoadingAndSuccess, [SUCCESS_ACTION])).to.equal(true);
-            expect(isSuccess(storeWithLoadingAndError, [SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithSuccessAndError, [SUCCESS_ACTION])).to.equal(true);
-            expect(isSuccess(storeWithLoadingSuccessAndError, [SUCCESS_ACTION])).to.equal(true);
+            expect(areAllSuccessful(storeWithLoadingAndSuccess, [SUCCESS_ACTION])).to.equal(true);
+            expect(areAllSuccessful(storeWithLoadingAndError, [SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithSuccessAndError, [SUCCESS_ACTION])).to.equal(true);
+            expect(areAllSuccessful(storeWithLoadingSuccessAndError, [SUCCESS_ACTION])).to.equal(true);
         });
 
         it("should handle checking more actions", () => {
-            expect(isSuccess(storeWithLoading, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithSuccess, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithLoading, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithSuccess, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
 
-            expect(isSuccess(storeWithLoadingAndSuccess, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithLoadingAndError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithSuccessAndError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
-            expect(isSuccess(storeWithLoadingSuccessAndError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithLoadingAndSuccess, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithLoadingAndError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithSuccessAndError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
+            expect(areAllSuccessful(storeWithLoadingSuccessAndError, [LOADING_ACTION, SUCCESS_ACTION])).to.equal(false);
         });
     });
 
